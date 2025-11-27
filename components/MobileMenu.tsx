@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Terminal } from 'lucide-react';
@@ -6,16 +7,22 @@ import { PERSONAL_INFO } from '../constants';
 interface MobileMenuProps {
   isOpen: boolean;
   onClose: () => void;
+  onNavigate?: (view: 'home' | 'projects' | 'about' | 'contact' | 'case-studies') => void;
 }
 
-const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
+const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, onNavigate }) => {
   const menuItems = [
-    { label: 'Dashboard', id: '01' },
-    { label: 'Projects', id: '02' },
-    { label: 'Case Studies', id: '03' },
-    { label: 'About', id: '04' },
-    { label: 'Contact', id: '05' },
+    { label: 'Projects', id: '01', view: 'projects' },
+    { label: 'Case Studies', id: '02', view: 'case-studies' },
+    { label: 'My Profile', id: '03', view: 'about' },
   ];
+
+  const handleItemClick = (view: string) => {
+      if (onNavigate) {
+          onNavigate(view as any);
+      }
+      onClose();
+  };
 
   return (
     <AnimatePresence>
@@ -54,13 +61,12 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
                     <div className="text-[10px] text-gray-500 font-mono mb-1 group-hover:text-green-400 transition-colors">
                         //{item.id}
                     </div>
-                    <a 
-                        href="#" 
-                        onClick={onClose}
-                        className="text-4xl font-light tracking-tighter text-white hover:pl-4 transition-all duration-300 block"
+                    <button 
+                        onClick={() => handleItemClick(item.view)}
+                        className="text-4xl font-light tracking-tighter text-white hover:pl-4 transition-all duration-300 block text-left w-full"
                     >
                         {item.label}
-                    </a>
+                    </button>
                 </motion.div>
             ))}
           </div>
